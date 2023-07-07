@@ -2,7 +2,7 @@
 import re
 import pickle
 import pandas as pd
-from sklearn import metrics
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, classification_report
 
 def print_banner():
     """ does what it says on the tin """
@@ -17,15 +17,6 @@ def print_banner():
                    - some kind of tool to analyse Linux kernel commits.
     """)
 
-
-
-def sha_from_release_tag(repo, release):
-    """ wip """
-    tags = repo.get_tags()
-    for tag in tags:
-        if tag.name == release:
-            return tag.commit.sha
-    return None
 
 
 def filter_to_regex_string(filter_obj):
@@ -45,7 +36,6 @@ def filter_to_regex_string(filter_obj):
 
 def get_commit_title(commit):
     """ wip """
-    # msg = commit.commit.message
     msg = str(commit['commit_msg'])
     return msg.split('\n', 1)[0].strip()
 
@@ -166,7 +156,6 @@ def pred_dataset(test_ds,fcommits):
         "date": date,
         "labels": labels
     }
-
     df = pd.DataFrame(data, columns=["commit_msg", "sha", "remote_url", "date", "labels"])
     pred_ds = pd.concat([test_ds, df]).drop_duplicates(subset=['sha'], keep='last')
     pred_ds = pred_ds.sort_values(by='commit_msg', ascending=True)
@@ -174,11 +163,18 @@ def pred_dataset(test_ds,fcommits):
 
 
 def generate_metrics(test_ds, pred_ds):
-    # print(test_ds.head(20))
     y_test = test_ds['labels']
     y_pred = pred_ds['labels']
 
-    print('\nMETRICS')
-    print(f'Precision: {metrics.precision_score(y_test, y_pred)}')
-    print(f'Recall: {metrics.recall_score(y_test, y_pred)}')
-    print(f'F1: {metrics.f1_score(y_test, y_pred)}')
+    report = classification_report(y_test,y_pred,target_names=["non-bugfix", "bugfix"],)
+    confusion_matrix_metric = confusion_matrix(y_test,y_pred)
+    accuracy_metric = accuracy_score(y_test, y_pred)
+    print(
+    "\n\n>>> Confusion Matrix:",
+    f"\nTP: {confusion_matrix_metric[1][1]}, FP: {confusion_matrix_metric[0][1]}",
+    f"\nFN: {confusion_matrix_metric[1][0]}, TN: {confusion_matrix_metric[0][0]}",
+    "\n\n>>> Accuracy: ",
+    accuracy_metric,
+    "\n\n>>>: Classification Report:\n",
+    report
+)

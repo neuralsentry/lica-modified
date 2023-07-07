@@ -36,7 +36,7 @@ BASIC_FILTER = {
                    "out-of-bounds read", "oob read", "out of bounds read", "out-of-bound read", "out of bound read"
     ],
     "General": [ "exploit", "memory corruption", "lpe ", "privesc", "privilege escalation", "attacker", "code execution", "hijack" ],
-    "Others": ["CVE"]
+    "Additional filters": ["CVE", "memleak", "memory leak"]
 }
 
 NUANCED_FILTER = {

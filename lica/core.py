@@ -144,7 +144,8 @@ def main():
 
     print("[+] Fetching commits from csv...")
 
-    df = pd.read_csv('lica/linux_cves.csv')
+    df = pd.read_csv('lica/data/200_samples_linux_bugfixes_labelled.csv')
+    df = df.drop_duplicates(subset=['sha'], keep='last')
     print("[+] Filtering commits based on config.py, this may involve some more API calls...")
     fcommits = filter_commits(df)
 
@@ -154,7 +155,8 @@ def main():
     print_stats()
     # Generate prediction dataset
     pred_ds = pred_dataset(df,fcommits)
-    y_ds = pd.read_csv('lica/linux_cves.csv')
+    y_ds = pd.read_csv('lica/data/200_samples_linux_bugfixes_labelled.csv')
+    y_ds = y_ds.drop_duplicates(subset=['sha'], keep='last')
     generate_metrics(y_ds, pred_ds)
 
 if __name__ == "__main__":

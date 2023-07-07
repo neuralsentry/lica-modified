@@ -4,12 +4,12 @@
 
 ## Overview
 
-This is a modified version of [Lica](https://github.com/sam4k/lica) which parses 100% bug fix commit messages from the Linux Kernel.
-  
+This version of [Lica](https://github.com/sam4k/lica) has additional filters that were added to enhance the original version.
 
 ## Usage
 
 ```
+cd lica
 pip install -r requirements.txt
 python lica\core.py
 ```
