@@ -4,19 +4,6 @@ import pickle
 import pandas as pd
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, classification_report
 
-def print_banner():
-    """ does what it says on the tin """
-    print("""
-          .____    .__
-          |    |   |__| ____ _____
-          |    |   |  |/ ___\\\\__  \\
-          |    |___|  \\  \\___ / __ \\_
-          |_______ \\__|\___  >____  /
-                  \\/       \\/     \\/
-
-                   - some kind of tool to analyse Linux kernel commits.
-    """)
-
 
 
 def filter_to_regex_string(filter_obj):
@@ -36,6 +23,7 @@ def filter_to_regex_string(filter_obj):
 
 def get_commit_title(commit):
     """ wip """
+    # msg = commit.commit.message
     msg = str(commit['commit_msg'])
     return msg.split('\n', 1)[0].strip()
 
@@ -137,40 +125,13 @@ def file_has_changes(kvers, file_name, changes):
     
 
 
-def pred_dataset(test_ds,fcommits):
-    # Convert all labels to non-bug before merging
-    test_ds.loc[test_ds.labels == 1, 'labels'] = 0
-    test_ds = test_ds.sort_values(by='commit_msg', ascending=True)
-    commit_msg, sha, remote_url, date, labels = [], [], [], [], []
-    for commits in fcommits:
-        commit_msg.append(commits['message'])
-        sha.append(commits['sha'])
-        remote_url.append(commits['remote_url'])
-        date.append(commits['date'])
-        labels.append(commits['labels'])
+def generate_metrics(labels, predictions):
 
-    data = {
-        "commit_msg": commit_msg,
-        "sha": sha,
-        "remote_url": remote_url,
-        "date": date,
-        "labels": labels
-    }
-    df = pd.DataFrame(data, columns=["commit_msg", "sha", "remote_url", "date", "labels"])
-    pred_ds = pd.concat([test_ds, df]).drop_duplicates(subset=['sha'], keep='last')
-    pred_ds = pred_ds.sort_values(by='commit_msg', ascending=True)
-    return pred_ds
-
-
-def generate_metrics(test_ds, pred_ds):
-    y_test = test_ds['labels']
-    y_pred = pred_ds['labels']
-
-    report = classification_report(y_test,y_pred,target_names=["non-bugfix", "bugfix"],)
-    confusion_matrix_metric = confusion_matrix(y_test,y_pred)
-    accuracy_metric = accuracy_score(y_test, y_pred)
+    report = classification_report(labels,predictions,target_names=["non-bugfix", "bugfix"],)
+    confusion_matrix_metric = confusion_matrix(labels,predictions)
+    accuracy_metric = accuracy_score(labels, predictions)
     print(
-    "\n\n>>> Confusion Matrix:",
+    "\n>>> Confusion Matrix:",
     f"\nTP: {confusion_matrix_metric[1][1]}, FP: {confusion_matrix_metric[0][1]}",
     f"\nFN: {confusion_matrix_metric[1][0]}, TN: {confusion_matrix_metric[0][0]}",
     "\n\n>>> Accuracy: ",

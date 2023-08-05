@@ -1,15 +1,15 @@
-# Linux Commit Analyser (Modified)
+# LICA v2
 
-  
 
 ## Overview
 
-This version of [Lica](https://github.com/sam4k/lica) has additional filters that were added to enhance the original version.
+This repository contains the modified codes of [Lica](https://github.com/sam4k/lica) to perform classification of vulnerable git commit messages.
+This version of Lica contains updated commit filters compared to v1.
 
-## Usage
+
+## Requirements
+  
 
 ```
-cd lica
 pip install -r requirements.txt
-python lica\core.py
 ```

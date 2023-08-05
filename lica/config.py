@@ -36,7 +36,8 @@ BASIC_FILTER = {
                    "out-of-bounds read", "oob read", "out of bounds read", "out-of-bound read", "out of bound read"
     ],
     "General": [ "exploit", "memory corruption", "lpe ", "privesc", "privilege escalation", "attacker", "code execution", "hijack" ],
-    "Additional filters": ["CVE", "memleak", "memory leak"]
+    "Web": ["XSS", "Cross-Site Scripting", "SQLi", "SQL Injection", "CSRF", "Cross-Site Request Forgery", "Path Traversal", "Server-Side Request Forgery", "SSRF", "XXE Injection"],
+    "Additional filters": ["CVE", "memleak", "memory leak", "dereference", "Arbitary", "DoS", "command injection", "rce"]
 }
 
 NUANCED_FILTER = {
@@ -62,7 +63,7 @@ and any local kernel source trees you want to check for patches:
 
 """
 DEF_CONFIG = {
-    "title_filter": "(fix|CVE|bug|leak|overflow|race|crash)",
+    "title_filter": "(fix|CVE|bug|leak|overflow|race|crash|patch|)",
     "message_ignore": None,
     "message_filter": BASIC_FILTER,
     "reporter_filter": None,
